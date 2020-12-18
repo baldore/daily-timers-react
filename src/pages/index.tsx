@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Timer from '../components/Timer'
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
 
       <main>
         <h1>Choose your timer</h1>
+        <Timer />
       </main>
     </div>
   )
