@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Timer from '../components/Timer'
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <div>
       <Head>
