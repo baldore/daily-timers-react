@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 
+type TimerOptions = {
+  initialValue: number
+  startOnInit?: boolean
+}
+
 /**
  * Add logic to control a timer.
  */
-export default function useTimer(
-  initialValue: number
-): {
+export default function useTimer({
+  initialValue,
+  startOnInit = false,
+}: TimerOptions): {
   count: number
   isDone: boolean
   restartTimer: () => void
@@ -15,27 +21,29 @@ export default function useTimer(
   const loop = useRef<number>()
 
   const timerFn = () => {
-    if (isDone) return
-
-    const newCount = count - 1
-    setCount(newCount)
-    if (newCount === 0) {
-      setIsDone(true)
-      clearInterval(loop.current)
-    }
+    setCount((oldCount) => oldCount - 1)
   }
 
   const restartTimer = () => {
     clearInterval(loop.current)
     setCount(initialValue)
     setIsDone(false)
-    loop.current = setInterval(timerFn, 1000)
+    loop.current = setInterval(() => timerFn(), 1000)
   }
 
   useEffect(() => {
-    loop.current = setInterval(timerFn, 1000)
-    return () => clearInterval(loop.current)
+    if (count === 0) {
+      setIsDone(true)
+      clearInterval(loop.current)
+    }
   }, [count])
+
+  useEffect(() => {
+    if (startOnInit) {
+      loop.current = setInterval(() => timerFn(), 1000)
+    }
+    return () => clearInterval(loop.current)
+  }, [])
 
   return { count, isDone, restartTimer }
 }
