@@ -1,30 +1,13 @@
 import { useEffect } from 'react'
 import useTimer from '../hooks/useTimer'
-
-const promptAudio = '/assets/audio/prompt.mp3'
-
-function notify() {
-  if (Notification.permission !== 'granted') {
-    return
-  }
-
-  const notification = new Notification('Finished timer: <label>', {
-    body: 'ujuuuu',
-    actions: [],
-  })
-  notification.onclick = function (e) {
-    e.preventDefault()
-    window.focus()
-  }
-
-  const audio = new Audio(promptAudio)
-  audio.play()
-}
+import { notify } from '../utils/notification'
+import { secondsToTime } from '../utils/time'
 
 function Timer(): JSX.Element {
   const { count, isDone, restartTimer } = useTimer({
-    initialValue: 3,
+    initialValue: 300,
   })
+  const { hours, minutes, seconds } = secondsToTime(count)
 
   useEffect(() => {
     if (isDone) {
@@ -34,7 +17,9 @@ function Timer(): JSX.Element {
 
   return (
     <div>
-      <div>{count}</div>
+      <div>
+        {hours}:{minutes}:{seconds}
+      </div>
       {isDone && <h2>Done!</h2>}
       <button onClick={restartTimer}>Restart?</button>
     </div>
