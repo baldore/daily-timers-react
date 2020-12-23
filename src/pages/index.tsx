@@ -1,10 +1,6 @@
-import styled from 'styled-components'
+import { Container } from 'components/commonStyles/layout'
 import Head from 'next/head'
-import Timer from '../components/Timer'
-
-const Container = styled.main({
-  padding: '0 16px',
-})
+import Link from 'next/link'
 
 export default function Home(): JSX.Element {
   return (
@@ -15,8 +11,10 @@ export default function Home(): JSX.Element {
       </Head>
 
       <Container>
-        <h1>Choose your timer</h1>
-        <Timer />
+        <h1>Timers</h1>
+        <Link href="/timers/new">
+          <a>New timer</a>
+        </Link>
       </Container>
     </>
   )

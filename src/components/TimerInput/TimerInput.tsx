@@ -6,6 +6,11 @@ import {
   VisuallyHidden,
 } from './TimerInput.styles'
 
+type Props = {
+  value?: string
+  onChange?: (value: string) => void
+}
+
 /**
  * Formats the hidden input to look like XX:XX:XX
  */
@@ -22,14 +27,13 @@ function formatInput(input: string): string {
  * This input only allows numbers and backspace to delete.
  * Cursor is not available at the moment
  */
-function TimerInput(): JSX.Element {
-  const [input, setInput] = useState('')
+function TimerInput({ value, onChange }: Props): JSX.Element {
   const [focus, setFocus] = useState(false)
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d]/g, '')
-    if (value.length <= 6) {
-      setInput(value)
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.replace(/[^\d]/g, '')
+    if (newValue.length <= 6) {
+      onChange(newValue)
     }
   }
 
@@ -40,8 +44,8 @@ function TimerInput(): JSX.Element {
         <input
           type="text"
           id="timer"
-          value={input}
-          onChange={onChange}
+          value={value}
+          onChange={onChangeHandler}
           pattern="[0-9]+"
           maxLength={6}
           autoComplete="off"
@@ -50,7 +54,7 @@ function TimerInput(): JSX.Element {
         />
       </VisuallyHidden>
       <FormattedInput focus={focus} htmlFor="timer">
-        {formatInput(input)}
+        {formatInput(value)}
       </FormattedInput>
     </InputContainer>
   )
