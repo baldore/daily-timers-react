@@ -1,14 +1,32 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-const InputContainer = styled.label({
+const VisuallyHidden = styled.div({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: '1px',
+  overflow: 'hidden',
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px',
+})
+
+const InputContainer = styled.div({
   display: 'block',
   marginBottom: '10px',
 })
 
-const TimerLabel = styled.span({
+const TimerLabel = styled.label({
   display: 'block',
 })
+
+const FormattedInput = styled.label<{ focus?: boolean }>((props) => ({
+  display: 'inline-block',
+  border: `1px solid ${props.focus ? '#03a9f4' : 'black'}`,
+  borderRadius: 2,
+  padding: '10px 20px',
+  userSelect: 'none',
+}))
 
 /**
  * Formats the hidden input to look like XX:XX:XX
@@ -28,6 +46,7 @@ function formatInput(input: string): string {
  */
 function TimerInput(): JSX.Element {
   const [input, setInput] = useState('')
+  const [focus, setFocus] = useState(false)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^\d]/g, '')
@@ -37,19 +56,24 @@ function TimerInput(): JSX.Element {
   }
 
   return (
-    <InputContainer htmlFor="timer">
-      <TimerLabel>Add a new timer</TimerLabel>
-      <input
-        type="text"
-        id="timer"
-        value={input}
-        onChange={onChange}
-        pattern="[0-9]+"
-        maxLength={6}
-        autoComplete="off"
-      />
-      {/* actual output */}
-      <label htmlFor="timer">{formatInput(input)}</label>
+    <InputContainer>
+      <TimerLabel htmlFor="timer">Add a new timer</TimerLabel>
+      <VisuallyHidden>
+        <input
+          type="text"
+          id="timer"
+          value={input}
+          onChange={onChange}
+          pattern="[0-9]+"
+          maxLength={6}
+          autoComplete="off"
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+      </VisuallyHidden>
+      <FormattedInput focus={focus} htmlFor="timer">
+        {formatInput(input)}
+      </FormattedInput>
     </InputContainer>
   )
 }
