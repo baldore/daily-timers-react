@@ -1,5 +1,5 @@
+import { Container } from '@chakra-ui/react'
 import styled from '@emotion/styled'
-import { Container } from 'components/commonStyles/layout'
 import Head from 'next/head'
 import Link from 'next/link'
 

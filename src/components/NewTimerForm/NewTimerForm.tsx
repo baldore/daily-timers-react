@@ -1,14 +1,34 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import { Container } from 'components/commonStyles/layout'
-import TimerInput from 'components/TimerInput/TimerInput'
+import React, { useReducer, useState } from 'react'
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Stack,
+} from '@chakra-ui/react'
 
-const Title = styled.h1({
-  fontSize: 24,
-})
+/**
+ * Old setState like hook
+ */
+function useSetState<T>(initialState: T) {
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    initialState
+  )
+
+  return [state, setState]
+}
 
 function NewTimerForm(): JSX.Element {
-  const [timer, setTimer] = useState('')
+  const [timer, setTimer] = useSetState({ foo: '' })
 
   const onSubmit: React.FormEventHandler = (e) => {
     e.preventDefault()
@@ -17,12 +37,39 @@ function NewTimerForm(): JSX.Element {
 
   return (
     <Container>
-      <Title>New Timer</Title>
-      <p>Add a new timer here!</p>
-      <form onSubmit={onSubmit}>
-        <TimerInput value={timer} onChange={setTimer} />
-        <button type="submit">Create!</button>
-      </form>
+      <Stack as="form" spacing="12px" onSubmit={onSubmit}>
+        <Heading size="2xl" mt="5">
+          New Timer
+        </Heading>
+        <p>Add a new timer here!</p>
+
+        <FormControl id="name">
+          <FormLabel>Name</FormLabel>
+          <Input type="text" />
+        </FormControl>
+
+        <FormControl id="timer">
+          <FormLabel>Timer</FormLabel>
+          <HStack>
+            <NumberInput defaultValue={0} min={0} max={59}>
+              <NumberInputField maxW="70px" />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <NumberInput defaultValue={0} min={0} max={59}>
+              <NumberInputField maxW="70px" />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </HStack>
+        </FormControl>
+
+        <Button type="submit">Create!</Button>
+      </Stack>
     </Container>
   )
 }
