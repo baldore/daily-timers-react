@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const VisuallyHidden = styled.div({
   clip: 'rect(0 0 0 0)',

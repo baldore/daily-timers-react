@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
+import styled from '@emotion/styled'
 import { Container } from 'components/commonStyles/layout'
 import TimerInput from 'components/TimerInput/TimerInput'
+
+const Title = styled.h1({
+  fontSize: 24,
+})
 
 function NewTimerForm(): JSX.Element {
   const [timer, setTimer] = useState('')
@@ -12,7 +17,7 @@ function NewTimerForm(): JSX.Element {
 
   return (
     <Container>
-      <h1>New Timer</h1>
+      <Title>New Timer</Title>
       <p>Add a new timer here!</p>
       <form onSubmit={onSubmit}>
         <TimerInput value={timer} onChange={setTimer} />

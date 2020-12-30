@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import useTimer from 'hooks/useTimer'
 import { notify } from 'utils/notification'
 import { secondsToTime } from 'utils/time'
-import TimerInput from './TimerInput'
 
 function Timer(): JSX.Element {
   const { count, isDone, restartTimer } = useTimer({
