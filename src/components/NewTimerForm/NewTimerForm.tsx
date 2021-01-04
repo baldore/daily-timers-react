@@ -16,6 +16,7 @@ import {
   NumberInputStepper,
   Stack,
 } from '@chakra-ui/react'
+import addTimer from 'services/addTimer'
 
 type FormData = {
   name: string
@@ -26,8 +27,16 @@ type FormData = {
 function NewTimerForm(): JSX.Element {
   const { register, handleSubmit, errors } = useForm<FormData>()
 
-  const onSubmit = handleSubmit((data) => {
-    console.log('yepppp', data)
+  const onSubmit = handleSubmit(async (data) => {
+    const timerAdded = await addTimer({
+      name: data.name,
+      hours: parseInt(data.hours),
+      minutes: parseInt(data.minutes),
+    })
+
+    if (timerAdded) {
+      console.log('this is funnn!!!!')
+    }
   })
 
   return (
@@ -45,7 +54,7 @@ function NewTimerForm(): JSX.Element {
         </FormControl>
 
         <FormControl id="timer">
-          <FormLabel>Timer</FormLabel>
+          <FormLabel>Timer (hh:mm)</FormLabel>
           <HStack>
             <NumberInput defaultValue={0} min={0} max={59}>
               <NumberInputField name="hours" ref={register} maxW="70px" />
