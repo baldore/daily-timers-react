@@ -1,8 +1,10 @@
-import React, { useReducer, useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   HStack,
@@ -15,25 +17,18 @@ import {
   Stack,
 } from '@chakra-ui/react'
 
-/**
- * Old setState like hook
- */
-function useSetState<T>(initialState: T) {
-  const [state, setState] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    initialState
-  )
-
-  return [state, setState]
+type FormData = {
+  name: string
+  hours: string
+  minutes: string
 }
 
 function NewTimerForm(): JSX.Element {
-  const [timer, setTimer] = useSetState({ foo: '' })
+  const { register, handleSubmit, errors } = useForm<FormData>()
 
-  const onSubmit: React.FormEventHandler = (e) => {
-    e.preventDefault()
-    console.log('yepppp')
-  }
+  const onSubmit = handleSubmit((data) => {
+    console.log('yepppp', data)
+  })
 
   return (
     <Container>
@@ -43,23 +38,24 @@ function NewTimerForm(): JSX.Element {
         </Heading>
         <p>Add a new timer here!</p>
 
-        <FormControl id="name">
+        <FormControl id="name" isInvalid={Boolean(errors.name)}>
           <FormLabel>Name</FormLabel>
-          <Input type="text" />
+          <Input name="name" ref={register({ required: true })} type="text" />
+          <FormErrorMessage>Name is required.</FormErrorMessage>
         </FormControl>
 
         <FormControl id="timer">
           <FormLabel>Timer</FormLabel>
           <HStack>
             <NumberInput defaultValue={0} min={0} max={59}>
-              <NumberInputField maxW="70px" />
+              <NumberInputField name="hours" ref={register} maxW="70px" />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
             <NumberInput defaultValue={0} min={0} max={59}>
-              <NumberInputField maxW="70px" />
+              <NumberInputField name="minutes" ref={register} maxW="70px" />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
