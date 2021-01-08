@@ -1,5 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import {
   Button,
   Container,
@@ -25,7 +26,8 @@ type FormData = {
 }
 
 function NewTimerForm(): JSX.Element {
-  const { register, handleSubmit, errors } = useForm<FormData>()
+  const { register, handleSubmit, errors, reset } = useForm<FormData>()
+  const router = useRouter()
 
   const onSubmit = handleSubmit(async (data) => {
     const timerAdded = await addTimer({
@@ -33,9 +35,10 @@ function NewTimerForm(): JSX.Element {
       hours: parseInt(data.hours),
       minutes: parseInt(data.minutes),
     })
+    reset()
 
     if (timerAdded) {
-      console.log('this is funnn!!!!')
+      router.push('/timers')
     }
   })
 

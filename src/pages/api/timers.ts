@@ -16,6 +16,7 @@ async function postTimers(req: NextApiRequest, res: NextApiResponse) {
     const createdTimer = await prisma.timer.create({ data: newTimerData })
     res.status(200).json(createdTimer)
   } catch (e) {
+    console.log(e)
     if (e.code === 'P2002') {
       return res
         .status(500)
